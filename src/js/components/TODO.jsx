@@ -4,40 +4,61 @@ import React, {useState} from "react";
 //<i class="fa-solid fa-trash-can fa-bounce"></i>
 //create your first component
 
-const todoList = ["Wash the dishes", "Do the laundry"];
+const todoList = ["No tasks, add a task"];
+
 
 /*
-const planetsInHTML = planets.map((planet, index) => {
-	return (
-		<li key={index} className="list-group-item">
-			{planet}
-		</li>
-	);
-});
-
-const content = <ul className="list-group m-5">{planetsInHTML}</ul>;
-*/
 const todoListInHTML = todoList.map((thingToDo, index) => {
 	<li key={index} className="list-group-item">
-			{thingToDo}
+			{thingToDo}{""}
 		</li>
 })
+    */
 
 const ToDo = () => {
-  const [thingToDo, setTodoListValue] = useState("");
+  const [thingToDo, setTodoListValue] = useState('');
+  const [task, setTask] = useState([]);
+  
+  
   const validateInput = () => {
     if (todoList === "") alert("the input value cannot be empty");
   };
+
+  const addTodoList = () => {
+    if (thingToDo.trim() === ""){
+      <div className="alert alert-danger" role="alert">Please enter a task</div>
+      return;
+    }
+    setTask([...task, inputTodoList]);
+    setTodoListValue('');
+  }
+
+const keyDown = (e) => {
+  if (e.key === "Enter") {
+    addTodoList();
+  }
+};
+
   return (
-    <div className="card">
+    <div className="card mx-auto mb-2">
 		<div className="card-body">
+    <h1 className="card-title">todo</h1>
+
       <input
         type="text"
         onChange={(e) => setTodoListValue(e.target.value)}
-        value={todoList}
+        onKeyDown={keyDown}
+        value={thingToDo}
+        placeholder="Type your task: then press Enter"
       />
-	  <button onClick={validateInput}>Click to validate empty</button>
-	  <ul className="list-group">{todoListInHTML}</ul>
+
+	  <ul className="list-group">
+      {todoList.map((thingToDo, index) => (
+        <li key={index} className="list-group-item">
+          {thingToDo}{" "}
+        </li>
+      ))}
+      </ul>
     </div>
 	</div>
   );
