@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 //include images into your bundle
 //<i class="fa-solid fa-trash-can fa-bounce"></i>
 //create your first component
+/*
+const todoList = ["No tasks, add a task", "does this still add another list item?"
+];
 
-const todoList = ["No tasks, add a task"];
-
-
+*/
 /*
 const todoListInHTML = todoList.map((thingToDo, index) => {
 	<li key={index} className="list-group-item">
@@ -16,51 +17,48 @@ const todoListInHTML = todoList.map((thingToDo, index) => {
     */
 
 const ToDo = () => {
-  const [thingToDo, setTodoListValue] = useState('');
+  const [thingToDo, setTodoListValue] = useState("");
   const [task, setTask] = useState([]);
-  
-  
-  const validateInput = () => {
-    if (todoList === "") alert("the input value cannot be empty");
+  const [hoverIndex, setHoverIndex] = useState(null);
+
+  const addItemToList = () => {
+    if (thingToDo.trim() === "") return;
+    setTask([...task, thingToDo]);
+    setTodoListValue("");
   };
 
-  const addTodoList = () => {
-    if (thingToDo.trim() === ""){
-      <div className="alert alert-danger" role="alert">Please enter a task</div>
-      return;
+  const keyDown = (e) => {
+    if (e.key === "Enter") {
+      addItemToList();
     }
-    setTask([...task, inputTodoList]);
-    setTodoListValue('');
-  }
+  };
 
-const keyDown = (e) => {
-  if (e.key === "Enter") {
-    addTodoList();
-  }
-};
+  const deleteListItem = (index) => {
+    setTask(task.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="card mx-auto mb-2">
-		<div className="card-body">
-    <h1 className="card-title">todo</h1>
+      <div className="card-body">
+        <h1 className="card-title">todo</h1>
 
-      <input
-        type="text"
-        onChange={(e) => setTodoListValue(e.target.value)}
-        onKeyDown={keyDown}
-        value={thingToDo}
-        placeholder="Type your task: then press Enter"
-      />
+        <input
+          type="text"
+          onChange={(e) => setTodoListValue(e.target.value)}
+          onKeyDown={keyDown}
+          value={thingToDo}
+          placeholder="Type your task: then press Enter"
+        />
 
-	  <ul className="list-group">
-      {todoList.map((thingToDo, index) => (
-        <li key={index} className="list-group-item">
-          {thingToDo}{" "}
-        </li>
-      ))}
-      </ul>
+        <ul className="list-group">
+          {task.map((thingToDo, index) => (
+            <li key={index} className="list-group-item">
+              <span>{thingToDo}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-	</div>
   );
 };
 
