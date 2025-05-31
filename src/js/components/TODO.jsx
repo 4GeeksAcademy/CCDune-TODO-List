@@ -52,8 +52,17 @@ const ToDo = () => {
 
         <ul className="list-group">
           {task.map((thingToDo, index) => (
-            <li key={index} className="list-group-item">
+            <li key={index} 
+            onMouseEnter={() => setHoverIndex(index)}
+            onMouseLeave={() => setHoverIndex(null)}
+            className="list-group-item">
               <span>{thingToDo}</span>
+              {hoverIndex === index && (
+                <button 
+                onclick={() => deleteListItem(index)}>
+                  <i class="fa-solid fa-trash-can fa-bounce"></i>
+                </button>
+              )}
             </li>
           ))}
         </ul>
