@@ -38,34 +38,47 @@ const ToDo = () => {
   };
 
   return (
-    <div className="card mx-auto mb-2">
-      <div className="card-body">
-        <h1 className="card-title">todo</h1>
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="card mx-auto mb-2">
+        <div className="card-body">
+          <h1 className="card-title">todo</h1>
 
-        <input
-          type="text"
-          onChange={(e) => setTodoListValue(e.target.value)}
-          onKeyDown={keyDown}
-          value={thingToDo}
-          placeholder="Type your task: then press Enter"
-        />
+          <input
+            type="text"
+            onChange={(e) => setTodoListValue(e.target.value)}
+            onKeyDown={keyDown}
+            value={thingToDo}
+            placeholder="Todo List"
+          />
 
-        <ul className="list-group">
-          {task.map((thingToDo, index) => (
-            <li key={index} 
-            onMouseEnter={() => setHoverIndex(index)}
-            onMouseLeave={() => setHoverIndex(null)}
-            className="list-group-item">
-              <span>{thingToDo}</span>
-              {hoverIndex === index && (
-                <button 
-                onclick={() => deleteListItem(index)}>
-                  <i class="fa-solid fa-trash-can fa-bounce"></i>
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
+          <ul className="list-group">
+            {task.map((thingToDo, index) => (
+              <li
+                key={index}
+                onMouseEnter={() => setHoverIndex(index)}
+                onMouseLeave={() => setHoverIndex(null)}
+                className="list-group-item"
+              >
+                <span>{thingToDo}</span>
+                {hoverIndex === index && (
+                  <button
+                    onClick={() => deleteListItem(index)}
+                    style={{
+                       marginLeft: "auto",
+                      marginRight: "3px",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    <i className="fa-solid fa-trash-can fa-bounce"></i>
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
