@@ -1,41 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-//include images into your bundle
-//<i class="fa-solid fa-trash-can fa-bounce"></i>
-//create your first component
-/*
-const todoList = ["No tasks, add a task", "does this still add another list item?"
-];
 
-*/
-/*
-const todoListInHTML = todoList.map((thingToDo, index) => {
-	<li key={index} className="list-group-item">
-			{thingToDo}{""}
-		</li>
-})
-    */
 
 const ToDo = () => {
-  const [thingToDo, setTodoListValue] = useState("");
-  const [task, setTask] = useState([]);
+  // initalize the arrays for the task list
+  const [newTask, setNewTask] = useState("");
+  const [taskList, setTask] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null);
 
+  // after the keyDown event is triggered, then add the input
+  // text to the task list
   const addItemToList = () => {
-    if (thingToDo.trim() === "") return;
-    setTask([...task, thingToDo]);
-    setTodoListValue("");
+    if (newTask.trim() === "") return;
+    setTask([...taskList, newTask]);
+    setNewTask("");
   };
 
+  //after the enter key is pressed then trigger the function
+  //addItemToList
   const keyDown = (e) => {
     if (e.key === "Enter") {
       addItemToList();
     }
   };
 
+  // delete the hovered over task from the list
   const deleteListItem = (index) => {
-    setTask(task.filter((_, i) => i !== index));
+    setTask(taskList.filter((_, i) => i !== index));
   };
+
+  
 
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -45,26 +39,27 @@ const ToDo = () => {
 
           <input
             type="text"
-            onChange={(e) => setTodoListValue(e.target.value)}
+            onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={keyDown}
-            value={thingToDo}
-            placeholder="Todo List"
+            value={newTask}
+            placeholder="Type a task and press Enter"
+            title="Type a task and press Enter to add it"
           />
 
           <ul className="list-group">
-            {task.map((thingToDo, index) => (
+            {taskList.map((newTask, index) => (
               <li
                 key={index}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
                 className="list-group-item"
               >
-                <span>{thingToDo}</span>
+                <span>{newTask}</span>
                 {hoverIndex === index && (
                   <button
                     onClick={() => deleteListItem(index)}
                     style={{
-                       marginLeft: "auto",
+                      marginLeft: "auto",
                       marginRight: "3px",
                       background: "transparent",
                       border: "none",
