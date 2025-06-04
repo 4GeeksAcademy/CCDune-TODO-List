@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
-
 const ToDo = () => {
   // initalize the arrays for the task list
   const [newTask, setNewTask] = useState("");
@@ -29,16 +27,20 @@ const ToDo = () => {
     setTask(taskList.filter((_, i) => i !== index));
   };
 
-  
-
   return (
-    <div className="d-flex justify-content-center align-items-center">
-      <div className="card mx-auto mb-2">
+    <div className="d-flex justify-content-center align-items-center text-center">
+      <div className="card col-3 mx-auto mb-2">
         <div className="card-body">
-          <h1 className="card-title">todo</h1>
+          <h1
+            className="card-title text-danger"
+            style={{ fontFamily: "sans-serif", fontSize: "3rem" }}
+          >
+            todo
+          </h1>
 
           <input
             type="text"
+            className="form-control w-100"
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={keyDown}
             value={newTask}
@@ -47,20 +49,20 @@ const ToDo = () => {
           />
 
           <ul className="list-group">
-            {taskList.map((newTask, index) => (
+            {taskList.map((task, index) => (
               <li
                 key={index}
+                className="list-group-item"
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
-                className="list-group-item"
               >
-                <span>{newTask}</span>
-                {hoverIndex === index && (
+                <div className="d-flex justify-content-between align-items-center">
+                  <span>{task}</span>
                   <button
                     onClick={() => deleteListItem(index)}
                     style={{
-                      marginLeft: "auto",
-                      marginRight: "3px",
+                      visibility: hoverIndex === index ? "visible" : "hidden",
+                      marginRight: "10px",
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",
@@ -69,10 +71,11 @@ const ToDo = () => {
                   >
                     <i className="fa-solid fa-trash-can fa-bounce"></i>
                   </button>
-                )}
+                </div>
               </li>
             ))}
           </ul>
+          <div className="mt-2 text-muted">Total tasks: {taskList.length}</div>
         </div>
       </div>
     </div>
