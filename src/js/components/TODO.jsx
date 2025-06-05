@@ -3,8 +3,18 @@ import React, { useState, useEffect } from "react";
 const ToDo = () => {
   // initalize the arrays for the task list
   const [newTask, setNewTask] = useState("");
-  const [taskList, setTask] = useState([]);
+  const [taskList, setTask] = useState(() => {
+    const savedTasks = localStorage.getItem("taskList");
+      return savedTasks ? JSON.parse(savedTasks) : [];
+ }); 
   const [hoverIndex, setHoverIndex] = useState(null);
+
+
+  // save to local storage when taskList is changed
+  useEffect (() => {
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+  }, [taskList]);
+
 
   // after the keyDown event is triggered, then add the input
   // text to the task list
@@ -44,7 +54,7 @@ const ToDo = () => {
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={keyDown}
             value={newTask}
-            placeholder="Type a task and press Enter"
+            placeholder="No tasks, add a task"
             title="Type a task and press Enter to add it"
           />
 
