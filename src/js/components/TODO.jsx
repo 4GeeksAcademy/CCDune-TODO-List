@@ -1,27 +1,53 @@
 import React, { useState, useEffect } from "react";
 
 const ToDo = () => {
+  const apiUserName = "cc_dune";
+  const apiUrl = `https://playground.4geeks.com/todo/todos/${apiUserName}`;
+
   // initalize the arrays for the task list
   const [newTask, setNewTask] = useState("");
-  const [taskList, setTask] = useState(() => {
-    const savedTasks = localStorage.getItem("taskList");
-      return savedTasks ? JSON.parse(savedTasks) : [];
- }); 
+ const [taskList, setTask] = useState([]);
+
+   /* const savedTasks = localStorage.getItem("taskList");
+      return savedTasks ? JSON.parse(savedTasks) : [];*/
   const [hoverIndex, setHoverIndex] = useState(null);
 
 
   // save to local storage when taskList is changed
   useEffect (() => {
+    const loadTasks = async () => {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setTask(data.todos || []);
+    };
+    loadTasks();
+  }, []);
+
+
+
+ /*   useEffect (() => {
     localStorage.setItem("taskList", JSON.stringify(taskList));
-  }, [taskList]);
+  }, [taskList]); 
+  */
 
 
   // after the keyDown event is triggered, then add the input
   // text to the task list
-  const addItemToList = () => {
+  const addItemToList = async () => {
     if (newTask.trim() === "") return;
-    setTask([...taskList, newTask]);
-    setNewTask("");
+
+    await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ label: newTask, done: false}),
+    });
+
+    setNewTask([""]);
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    setTask(data.todos || []);
   };
 
   //after the enter key is pressed then trigger the function
@@ -32,10 +58,25 @@ const ToDo = () => {
     }
   };
 
-  // delete the hovered over task from the list
-  const deleteListItem = (index) => {
-    setTask(taskList.filter((_, i) => i !== index));
+  // delete the hovered over task from the server
+  const deleteListItem = async (index) => {
+    const taskToDelete = taskList[index];
+
+    await fetch(`${apiUrl}/${taskToDelete.id}`, {
+      method: "DELETE",
+    });
+
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    setTask(data.todos || []);
+    //setTask(taskList.filter((_, i) => i !== index));
   };
+
+
+ const clearAllTasks = async () => {
+      await fetch(apiUrl, { method: "DELETE" });
+      setTask([]);
+ };
 
   return (
     <div className="d-flex justify-content-center align-items-center text-center">
@@ -50,7 +91,7 @@ const ToDo = () => {
 
           <input
             type="text"
-            className="form-control w-100"
+            className="form-control w-100 mb-2"
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={keyDown}
             value={newTask}
@@ -86,6 +127,13 @@ const ToDo = () => {
             ))}
           </ul>
           <div className="mt-2 text-muted">Total tasks: {taskList.length}</div>
+
+          <button
+            onClick={clearAllTasks}
+            className="btn btn-alert btn-sm mt-3"
+            >
+              Delete ALL Tasks
+            </button>
         </div>
       </div>
     </div>
