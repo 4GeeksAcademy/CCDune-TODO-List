@@ -13,14 +13,21 @@ const ToDo = () => {
   // create new user or ensure user exists, then load tasks from server
   useEffect(() => {
     const setupUserAndLoadTasks = async () => {
-      // Create the user
-      await fetch(userUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name: apiUserName })
-      });
+
+      //first check to see if the user exists
+      const checkUser = await fetch(userUrl);
+
+      if (checkUser.status === 404){ 
+        //ifuser not found then create one
+        await fetch(userUrl, {
+          method: "POST", 
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name: apiUserName})
+        });
+
+      }
 
       // Get the tasks
       const response = await fetch(userUrl);
